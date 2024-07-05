@@ -20,7 +20,7 @@ class Book:
     @classmethod
     def generate_id(cls):
         """类方法，用于生成书籍的唯一ID"""
-        return f"BK-{uuid.uuid4()}"
+        return f"BK{cls._book_count}-{uuid.uuid4()}"
 
     @staticmethod
     def is_valid_isbn(isbn):
