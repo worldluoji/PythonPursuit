@@ -41,3 +41,6 @@ print(tl)
 newl = list(tl)
 newl[0] = 6
 print(newl)
+
+array = [1,2,3,4,5,6]
+print(sum(array[::2]), sum(array[1::2]))
