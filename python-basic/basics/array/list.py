@@ -1,6 +1,9 @@
 
 l = [1,2,3,4]
 
+for (index, val) in enumerate(l):
+    print(l)
+
 l.remove(1)
 
 print(l)
@@ -30,3 +33,11 @@ a1 = [1,2]
 a2 = [1,2]
 print(a1 == a2)
 # True
+
+tl = tuple(l)
+print(tl)
+# t1[0] = 3 error tuple value can not change
+
+newl = list(tl)
+newl[0] = 6
+print(newl)
