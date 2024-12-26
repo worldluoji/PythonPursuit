@@ -59,3 +59,27 @@ finally:
 除了Selenium之外，还有其他一些工具也可以用于网页自动化，比如Puppeteer（主要用于Node.js环境），但如果你已经在使用Python，那么Selenium通常是首选。
 
 请注意，随着技术的发展，新的工具和方法不断涌现，所以在开始项目前检查最新的工具和技术是很重要的。此外，对于一些现代化的单页应用(SPA)，可能还需要处理JavaScript生成的内容，这时可以考虑使用像Playwright这样的工具，它也支持Python，并且对现代Web应用程序有更好的支持。
+
+
+## 查询元素
+```html
+<ol id="vegetables">
+ <li class="potatoes">…
+ <li class="onions">…
+ <li class="tomatoes"><span>Tomato is a Vegetable</span>…
+</ol>
+<ul id="fruits">
+  <li class="bananas">…
+  <li class="apples">…
+  <li class="tomatoes"><span>Tomato is a Fruit</span>…
+</ul>
+```
+通过如下方法，可以找到tomatoes元素：
+```python
+fruits = driver.find_element(By.ID, "fruits")
+tomatoes = fruits.find_element(By.CLASS_NAME,"tomatoes")
+```
+
+## reference
+- https://www.selenium.dev/zh-cn/documentation/webdriver/elements/finders/
+- https://www.selenium.dev/zh-cn/documentation/webdriver/elements/locators/
