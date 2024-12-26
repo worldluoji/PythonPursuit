@@ -10,7 +10,7 @@ pip install selenium
 ```
 
 2. 下载WebDriver
-根据你想要自动化的浏览器下载对应的WebDriver。例如，如果你要自动化Chrome浏览器，你需要从Chromium的官方网站下载与你的Chrome版本相匹配的ChromeDriver。
+根据你想要自动化的浏览器[下载对应的WebDriver](https://www.selenium.dev/downloads/#Platforms%20Supported%20by%20Selenium)。
 
 Selenium 4 引入了对 WebDriver Manager 的内置支持，这意味着在某些情况下，你不再需要手动下载和管理浏览器驱动程序（如ChromeDriver或GeckoDriver）。这项改进简化了设置过程，因为Selenium现在可以自动处理驱动程序的下载和配置。
 
