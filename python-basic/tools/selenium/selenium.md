@@ -27,13 +27,16 @@ Selenium 4 引入了对 WebDriver Manager 的内置支持，这意味着在某�
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service  # 导入 Chrome Service 类
 import time
 
 # 设置ChromeDriver的路径
 driver_path = '/path/to/chromedriver'
 
-# 创建一个Chrome浏览器实例
-driver = webdriver.Chrome(executable_path=driver_path)
+# 创建 Service 对象，指定驱动程序的路径
+s = Service('/path/to/chromedriver')
+# 使用 Service 对象创建 WebDriver 实例
+driver = webdriver.Chrome(service=s)
 
 try:
     # 打开目标网站
