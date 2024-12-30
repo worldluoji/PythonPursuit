@@ -47,4 +47,4 @@ init 1 python:
 <br>
 
 ## reference
-https://www.renpy.org/doc/html/python.html#python-statement
+https://doc.renpy.cn/zh-CN/python.html#python-statement
