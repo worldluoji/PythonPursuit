@@ -35,11 +35,6 @@ curl -sSL https://install.python-poetry.org | python3 -
 poetry --version
 ```
 
-也可以通过pip直接安装
-```shell
-pip3 install poetry
-```
-
 配置国内镜像源：
 ```shell
 poetry source add --priority=primary mirrors https://mirror.sjtu.edu.cn/pypi/web/simple
