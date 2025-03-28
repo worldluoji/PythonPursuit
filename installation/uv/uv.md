@@ -23,120 +23,20 @@ pipx install uv
 
 ---
 
-### 2. 创建虚拟环境
-
-#### 初始化虚拟环境
+### 2. 创建项目
 ```bash
-uv venv .venv  # 在当前目录创建名为 `.venv` 的虚拟环境
-```
-
-#### 激活虚拟环境
-• **Linux/macOS**:
-  ```bash
-  source .venv/bin/activate
-  ```
-• **Windows**:
-  ```cmd
-  .venv\Scripts\activate.bat
-  ```
-
----
-
-### 3. 安装依赖包
-
-#### 从 `requirements.txt` 安装
-```bash
-uv pip install -r requirements.txt
-```
-
-#### 直接安装单个包
-```bash
-uv pip install requests
-```
-
-#### 安装开发依赖（例如 `black`）
-```bash
-uv pip install black --group dev
+uv init <your_project_name>
 ```
 
 ---
 
-### 4. 管理依赖
-
-#### 生成 `requirements.txt`
+### 3. 依赖包管理
+添加依赖包
 ```bash
-uv pip freeze > requirements.txt
+uv add "mcp[cli]"
 ```
 
-#### 同步依赖到 `pyproject.toml`
+删除依赖包
 ```bash
-uv pip sync pyproject.toml
+uv remove "mcp[cli]"
 ```
-
----
-
-### 5. 升级和卸载
-
-#### 升级所有包
-```bash
-uv pip upgrade --all
-```
-
-#### 卸载包
-```bash
-uv pip uninstall requests
-```
-
----
-
-### 6. 项目迁移（从 `venv`/`pip` 切换）
-
-1. 删除旧的虚拟环境：
-   ```bash
-   rm -rf .venv  # 或者删除其他旧环境目录
-   ```
-
-2. 用 `uv` 创建新环境并安装依赖：
-   ```bash
-   uv venv .venv
-   source .venv/bin/activate  # 激活环境
-   uv pip install -r requirements.txt
-   ```
-
----
-
-### 常见问题
-
-#### 1. 虚拟环境路径问题
-• 如果遇到路径错误，确保激活命令与操作系统匹配（Windows 使用反斜杠 `\`，Linux/macOS 使用正斜杠 `/`）。
-
-#### 2. 替代 `pip` 命令
-• 所有 `pip` 命令均可替换为 `uv pip`，例如：
-  ```bash
-  uv pip list
-  uv pip show requests
-  ```
-
-#### 3. 性能优势
-• `uv` 使用 Rust 实现，安装速度通常比传统 `pip` 快 10-100 倍，尤其在大型项目中优势明显。
-
----
-
-### 高级用法
-
-#### 依赖组管理
-在 `pyproject.toml` 中定义依赖组：
-```toml
-[tool.uv]
-dependencies = ["requests"]
-dev = ["black", "pytest"]
-```
-
-安装所有依赖组：
-```bash
-uv pip install . --all-groups
-```
-
----
-
-通过 `uv`，你可以更高效地管理 Python 项目依赖和虚拟环境。如果需要更详细的文档，请参考 [uv 官方文档](https://github.com/astral-sh/uv)。
