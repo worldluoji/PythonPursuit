@@ -1,7 +1,6 @@
 
 from multiprocessing import Pool,Queue
 import os
-import psutil
 
 # 定义一个队列用于存储进程id
 # queue = Queue()
@@ -13,7 +12,7 @@ def f(x):
 
 if __name__ == '__main__':
     # 逻辑cpu个数
-    count = psutil.cpu_count()
+    count = os.cpu_count()
     print(f'My Computer CPU Number is {count}')
 
     with Pool(count * 2) as p:
