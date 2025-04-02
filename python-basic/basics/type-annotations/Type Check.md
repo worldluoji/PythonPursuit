@@ -9,3 +9,15 @@ True
 >>> isinstance(lst,tuple)
 False
 ```
+
+对比js:
+```js
+a = [1,2,3]
+(3) [1, 2, 3]
+a instanceof Array
+true
+a instanceof Object
+true
+Array.isArray(a)
+true
+```
