@@ -13,4 +13,4 @@ b1 = BaseController()
 b2 = BaseController()
 
 print(b1)
-print(b1 == b2)
+print(b1 is b2)
