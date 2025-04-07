@@ -40,3 +40,14 @@ uv add "mcp[cli]"
 ```bash
 uv remove "mcp[cli]"
 ```
+
+---
+### 4. 修改镜像源
+```shell
+# 临时设置环境变量（仅当前终端生效）
+export UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 永久生效（写入shell配置文件）
+echo 'export UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple' >> ~/.zshrc  # zsh用户
+source ~/.zshrc
+```
