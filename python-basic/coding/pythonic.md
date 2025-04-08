@@ -185,6 +185,7 @@ with open('file.txt') as f:
     for line in f:
         print line
 ```
+这里需要注意，使用open()函数，file.txt文件需要在当前执行文件所在的目录。否则我们应该用os.path.join() 用于安全地拼接路径。
 
 ## 11. 代码续行
 Bad
