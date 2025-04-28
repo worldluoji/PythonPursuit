@@ -4,9 +4,9 @@
 ---
 
 ### **核心价值**
-• 将敏感配置（API密钥、数据库密码等）与代码分离
-• 实现不同环境（开发/测试/生产）的配置切换
-• 符合12要素应用原则（The Twelve-Factor App）
+- 将敏感配置（API密钥、数据库密码等）与代码分离
+- 实现不同环境（开发/测试/生产）的配置切换
+- 符合12要素应用原则（The Twelve-Factor App）
 
 ---
 
@@ -94,8 +94,8 @@ UNSAFE_KEY = value with spaces  # 需要引号包裹
 ```
 
 #### 2. 版本控制
-• 提交 `.env.example`（无敏感值）
-• 将 `.env` 加入 `.gitignore`
+- 提交 `.env.example`（无敏感值）
+- 将 `.env` 加入 `.gitignore`
 
 示例 `.env.example`：
 ```ini
@@ -157,9 +157,9 @@ python -m dotenv run -- python your_script.py  # 带环境执行
 ---
 
 ### **版本兼容性**
-• 支持Python 3.7+
-• 支持跨平台（Windows/Linux/macOS）
-• 最新版本（1.0+）默认不覆盖已存在的环境变量
+- 支持Python 3.7+
+- 支持跨平台（Windows/Linux/macOS）
+- 最新版本（1.0+）默认不覆盖已存在的环境变量
 
 ---
 
