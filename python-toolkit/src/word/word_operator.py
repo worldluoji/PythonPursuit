@@ -177,3 +177,23 @@ def save(doc, save_to= ''):
             return RETUENED_STATUS.FAIL_TO_SAVE.value
 
     return RETUENED_STATUS.SUCCESS.value
+
+
+'''获取Heading内容
+比如“3.1.2. 测试内容”  提取到“测试内容”
+目前标号'3.1.2'还获取不到。
+'''
+def extract_headings(doc):
+    headings = []
+    
+    for para in doc.paragraphs:
+        # 识别标题样式（如 Heading 1~4）
+        if para.style.name.startswith('Heading'):
+            text = para.text.strip()
+            if len(text) > 0:
+                headings.append({
+                    "level": para.style.name,
+                    "content": text
+                })
+    
+    return headings
