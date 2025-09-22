@@ -5,9 +5,9 @@ class Singleton:
     _lock = threading.Lock()
 
     def __new__(cls):
-        if not cls._instance:  # 第一次检查（无锁）
+        if not cls._instance:  # 第一次检查（无锁）, 避免了当单例实例已经存在时不必要的同步开销
             with cls._lock:
-                if not cls._instance:  # 第二次检查（持锁状态）
+                if not cls._instance:  # 第二次检查（持锁状态）,确保只有一个线程能够创建实例, 可能别的线程创建完，锁已经释放了，这时候再进来如果不再判断就会重复创建
                     cls._instance = super().__new__(cls)
         return cls._instance
     
