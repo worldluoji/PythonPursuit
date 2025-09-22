@@ -2,7 +2,7 @@ import threading
 
 class Singleton:
     _instance = None
-    _lock = threading.Lock()
+    _lock = threading.Lock() # threading.Lock() 是 Python 标准库中提供的一个线程同步原语，用于实现线程间的互斥锁机制。
 
     def __new__(cls):
         if not cls._instance:  # 第一次检查（无锁）, 避免了当单例实例已经存在时不必要的同步开销
