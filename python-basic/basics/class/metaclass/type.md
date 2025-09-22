@@ -27,6 +27,14 @@ MyClass = type('MyClass', (), {'x': 10})
 2. **基类元组**（继承的父类）：默认为空时，隐式继承 `object`
 3. **命名空间字典**（类属性、方法）：`{'x': 10}`
 
+类实际是type的实例：
+```python
+class MyClass:
+    pass
+
+print(type(MyClass))  # 输出: <class 'type'>
+```
+
 ---
 
 ### **3. 元类与父类的区别**
