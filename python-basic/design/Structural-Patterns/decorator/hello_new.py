@@ -11,7 +11,6 @@ def hello(fn):
 def foo():
     '''foo help doc'''
     print("i am foo")
-    pass
  
 foo()
 print(foo.__name__)
