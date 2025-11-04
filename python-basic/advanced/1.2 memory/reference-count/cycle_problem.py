@@ -28,9 +28,6 @@ def analyze_memory_behavior():
     # 启用调试
     gc.set_debug(gc.DEBUG_SAVEALL)
 
-    # 创建循环引用
-    cycle_head = create_cycle()
-
     # 手动触发垃圾回收
     print("🚀 触发垃圾回收...")
     collected = gc.collect()
@@ -41,4 +38,11 @@ def analyze_memory_behavior():
     # 检查对象是否还存在
     print(f"🔍 cycle_head 仍然存在: {cycle_head is not None}")
 
+
 analyze_memory_behavior()
+
+try:
+    print("final", cycle_head.value)
+except:
+    print("cycle_head引用的对象不再有效")
+
