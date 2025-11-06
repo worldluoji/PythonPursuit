@@ -4,6 +4,7 @@ class SimpleMeta(type):
     def __new__(cls, name, bases, namespace):
         print(f"🔮 正在创建类: {name}")
         print(f"📦 命名空间内容: {list(namespace.keys())}")
+        print(f"⌚️ bases 是一个元组，包含了正在创建的类所继承的所有父类: {bases}")
         
         # 在创建类时自动添加一些属性
         namespace['created_by'] = 'SimpleMeta'
