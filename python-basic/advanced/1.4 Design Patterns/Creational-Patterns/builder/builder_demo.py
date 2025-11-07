@@ -1,35 +1,95 @@
-class Person:
-    def __init__(self, name, age, sex):
-        self.name = name
-        self.age = age
-        self.sex = sex
-
-    def __str__(self):
-        return f'Person(name={self.name}, age={self.age}, sex={self.sex})'
-
-
-class PersonBuilder:
+class SQLQuery:
+    """复杂SQL查询对象"""
     def __init__(self):
-        self.name = None
-        self.age = None
-        self.sex = None
+        self.select = "*"
+        self.table = ""
+        self.where_conditions = []
+        self.limit_value = None
+    
+    def __str__(self):
+        query = f"SELECT {self.select} FROM {self.table}"
+        if self.where_conditions:
+            query += f" WHERE {' AND '.join(self.where_conditions)}"
+        if self.limit_value:
+            query += f" LIMIT {self.limit_value}"
+        return query
 
-    def set_name(self, value):
-        self.name = value
+class SQLQueryBuilder:
+    """SQL查询建造者"""
+    def __init__(self):
+        self.query = SQLQuery()
+    
+    def select(self, columns: str) -> 'SQLQueryBuilder':
+        self.query.select = columns
+        return self  # 返回self支持链式调用
+    
+    def from_table(self, table: str) -> 'SQLQueryBuilder':
+        self.query.table = table
         return self
     
-    def set_age(self, value):
-        self.age = value
+    def where(self, condition: str) -> 'SQLQueryBuilder':
+        self.query.where_conditions.append(condition)
         return self
     
-    def set_sex(self, value):
-        self.sex = value
+    def limit(self, limit: int) -> 'SQLQueryBuilder':
+        self.query.limit_value = limit
         return self
     
-    def build(self):
-        return Person(self.name, self.age, self.sex)
+    def build(self) -> SQLQuery:
+        return self.query
 
+# Pythonic的替代方案：使用@dataclass和流畅接口
+from dataclasses import dataclass
+from typing import List, Optional
 
-# Correct instantiation - outside of any class
-person = PersonBuilder().set_name('James').set_age(18).set_sex('Male').build()
-print(person)
+'''
+@dataclass 是 Python 3.7+ 中引入的一个装饰器，
+它能自动为类生成常见的特殊方法，大大简化了类的定义
+'''
+@dataclass
+class PythonicSQLQuery:
+    select: str = "*"
+    table: str = ""
+    where_conditions: List[str] = None
+    limit_value: Optional[int] = None
+    
+    def __post_init__(self):
+        if self.where_conditions is None:
+            self.where_conditions = []
+    
+    def __str__(self):
+        # 相同的字符串表示逻辑
+        pass
+
+# 测试建造者模式
+def test_builder_pattern():
+    print("=== 建造者模式测试 ===")
+    
+    # 传统建造者模式
+    builder = SQLQueryBuilder()
+    query = (builder
+        .select("id, name, email")
+        .from_table("users")
+        .where("age > 18")
+        .where("status = 'active'")
+        .limit(10)
+        .build())
+    
+    print(f"🛠️ 构建的查询: {query}")
+    
+    # 更Pythonic的方式：使用字典和**解包
+    def create_sql_query(**kwargs):
+        query = SQLQuery()
+        for key, value in kwargs.items():
+            if hasattr(query, key):
+                setattr(query, key, value)
+        return query
+    
+    simple_query = create_sql_query(
+        select="COUNT(*)",
+        table="orders",
+        where_conditions=["created_at > '2024-01-01'"]
+    )
+    print(f"🐍 Pythonic查询: {simple_query}")
+
+test_builder_pattern()
