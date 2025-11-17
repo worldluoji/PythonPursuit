@@ -179,4 +179,6 @@ def test_domain_driven_design():
     except ValueError as e:
         print(f"❌ 业务规则验证: {e}")
 
-test_domain_driven_design()
+
+if __name__ == "__main__":
+    test_domain_driven_design()
