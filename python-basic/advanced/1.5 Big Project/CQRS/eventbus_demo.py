@@ -50,6 +50,7 @@ class EventBus:
     async def _run_handler_async(self, handler: Callable, event: DomainEvent):
         """异步运行事件处理器"""
         try:
+            #  if the handler is an async function
             if asyncio.iscoroutinefunction(handler):
                 await handler(event)
             else:
