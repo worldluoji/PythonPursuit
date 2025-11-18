@@ -9,7 +9,7 @@ project_root = os.path.abspath(os.path.join(current_dir, '..'))
 sys.path.insert(0, project_root)
 
 from DDD.ddd_demo import OrderStatus, Order, OrderConfirmedEvent, Money
-from .eventbus_demo import EventBus
+from eventbus_demo import EventBus
 
 # 命令 - 写操作
 class CreateOrderCommand:
