@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防锁屏工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .description {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .status-panel {
+            display: flex;
+            justify-content: space-around;
+            margin: 2rem 0;
+        }
+        
+        .status-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            min-width: 150px;
+        }
+        
+        .status-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        
+        .active {
+            color: #4CAF50;
+        }
+        
+        .inactive {
+            color: #F44336;
+        }
+        
+        .controls {
+            margin: 2rem 0;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .stop-btn {
+            background: #F44336;
+        }
+        
+        .stop-btn:hover {
+            background: #d32f2f;
+        }
+        
+        .activity-indicator {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+        
+        .activity-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.5s;
+        }
+        
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            text-align: left;
+        }
+        
+        .info-box h3 {
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        .info-box ul {
+            padding-left: 1.5rem;
+        }
+        
+        .info-box li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 防锁屏工具</h1>
+        <p class="description">此页面通过模拟用户活动防止电脑进入休眠或锁屏状态。保持页面打开即可，不影响您的正常操作。</p>
+        
+        <div class="status-panel">
+            <div class="status-item">
+                <div>状态</div>
+                <div id="status" class="status-value inactive">未激活</div>
+            </div>
+            <div class="status-item">
+                <div>运行时间</div>
+                <div id="runtime" class="status-value">00:00:00</div>
+            </div>
+            <div class="status-item">
+                <div>活动计数</div>
+                <div id="activityCount" class="status-value">0</div>
+            </div>
+        </div>
+        
+        <div class="activity-indicator">
+            <div id="activityBar" class="activity-bar"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn">开始防锁屏</button>
+            <button id="stopBtn" class="stop-btn" disabled>停止防锁屏</button>
+        </div>
+        
+        <div class="info-box">
+            <h3>使用说明</h3>
+            <ul>
+                <li>点击"开始防锁屏"按钮启动防锁屏功能</li>
+                <li>页面将模拟微小鼠标移动，防止系统锁屏</li>
+                <li>此操作不会干扰您的正常电脑使用</li>
+                <li>要停止防锁屏，点击"停止防锁屏"按钮或直接关闭页面</li>
+                <li>注意：某些公司策略可能覆盖此功能</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>注意：此工具仅用于防止系统自动锁屏，请遵守您所在组织的计算机使用政策。</p>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let isActive = false;
+        let activityInterval;
+        let startTime;
+        let activityCount = 0;
+        let runtimeInterval;
+        
+        // DOM元素
+        const statusElement = document.getElementById('status');
+        const runtimeElement = document.getElementById('runtime');
+        const activityCountElement = document.getElementById('activityCount');
+        const activityBar = document.getElementById('activityBar');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        
+        // 开始防锁屏
+        function startPreventingSleep() {
+            if (isActive) return;
+            
+            isActive = true;
+            activityCount = 0;
+            startTime = new Date();
+            
+            // 更新UI状态
+            statusElement.textContent = '运行中';
+            statusElement.className = 'status-value active';
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            activityBar.style.width = '100%';
+            
+            // 每30秒模拟一次活动
+            activityInterval = setInterval(simulateActivity, 30000);
+            
+            // 立即执行一次活动
+            simulateActivity();
+            
+            // 更新运行时间
+            runtimeInterval = setInterval(updateRuntime, 1000);
+            updateRuntime();
+            
+            // 更新活动计数
+            updateActivityCount();
+        }
+        
+        // 停止防锁屏
+        function stopPreventingSleep() {
+            if (!isActive) return;
+            
+            isActive = false;
+            
+            // 清除定时器
+            clearInterval(activityInterval);
+            clearInterval(runtimeInterval);
+            
+            // 更新UI状态
+            statusElement.textContent = '已停止';
+            statusElement.className = 'status-value inactive';
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            activityBar.style.width = '0%';
+        }
+        
+        // 模拟用户活动
+        function simulateActivity() {
+            // 创建一个不可见的iframe并聚焦它，然后移除
+            const iframe = document.createElement('iframe');
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = 'none';
+            iframe.style.position = 'absolute';
+            iframe.style.top = '-1000px';
+            document.body.appendChild(iframe);
+            
+            // 聚焦iframe然后移除
+            setTimeout(() => {
+                iframe.contentWindow.focus();
+                document.body.removeChild(iframe);
+                document.body.focus();
+                
+                // 更新活动计数
+                activityCount++;
+                updateActivityCount();
+            }, 100);
+        }
+        
+        // 更新运行时间
+        function updateRuntime() {
+            if (!isActive) return;
+            
+            const now = new Date();
+            const diff = now - startTime;
+            
+            const hours = Math.floor(diff / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            
+            runtimeElement.textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // 更新活动计数
+        function updateActivityCount() {
+            activityCountElement.textContent = activityCount;
+        }
+        
+        // 事件监听
+        startBtn.addEventListener('click', startPreventingSleep);
+        stopBtn.addEventListener('click', stopPreventingSleep);
+        
+        // 页面卸载时停止防锁屏
+        window.addEventListener('beforeunload', stopPreventingSleep);
+        
+        // 初始状态
+        updateRuntime();
+    </script>
+</body>
+</html>
