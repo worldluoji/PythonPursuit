@@ -44,3 +44,5 @@ hint: See PEP 668 for the detailed specification.
 MacOS、部分 Linux 发行版（如 Debian、Ubuntu）通过 ​PEP 668​ 标记了系统管理的 Python 环境，阻止直接使用 pip install 全局安装包，以避免与系统包管理器（如 brew、apt）冲突。
 
 不建议绕过操作系统限制，建议使用虚拟环境或pipx， 目前发现pipx里一些包是没有的。
+
+✅ 大多数情况下，在 Windows 上的标准 Python 安装（无论是从 python.org 还是其他来源）都不会受到 PEP 668 的影响。当然，为了安全起见，推荐还是使用虚拟环境（venv）来隔离项目依赖。
