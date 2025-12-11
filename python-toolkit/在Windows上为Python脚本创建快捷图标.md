@@ -13,6 +13,7 @@ cd /d "%~dp0"
 python quick_open.py
 pause
 ```
+要注意中文问题，有的操作系统脚本里有中文会报错，建议用英文。
 
 ### 1.2 创建VBS脚本隐藏命令行窗口（可选）
 创建 `run_quick_open.vbs`：
