@@ -436,7 +436,7 @@ class DocxContentMerger:
         """
         # 临时修改占位符模式
         original_pattern = self.placeholder_pattern
-        self.placeholder_pattern = rf'\{{{{\s*{placeholder}\s*}}}}'
+        self.placeholder_pattern = r"\{\{\s*(" + re.escape(placeholder) + r")\s*\}\}"
         
         try:
             result = self.merge_documents(source_file, target_file, output_file)
