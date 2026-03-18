@@ -1,7 +1,10 @@
 from docx import Document
-from docx.shared import RGBColor
-from docx.shared import Pt
+from docx.table import Table
+from docx.oxml.ns import qn
+from docx.oxml import OxmlElement
+from docx.shared import RGBColor, Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+
 from enum import Enum  
 
 # https://python-docx.readthedocs.io/en/latest/#
@@ -197,3 +200,48 @@ def extract_headings(doc):
                 })
     
     return headings
+
+
+# 以下是表格相关
+def set_cell_background(cell, color):
+    """设置单元格背景颜色，color 为 RGB 元组 (r,g,b) 或十六进制字符串 '#RRGGBB'"""
+    # 获取或创建 tcPr 元素
+    tcPr = cell._tc.get_or_add_tcPr()
+    # 创建 shading 元素
+    shd = OxmlElement('w:shd')
+    # 设置属性
+    if isinstance(color, tuple):
+        # 将 RGB 转换为十六进制字符串
+        fill = "{:02X}{:02X}{:02X}".format(color[0], color[1], color[2])
+    else:
+        fill = color.lstrip('#')
+    shd.set(qn('w:fill'), fill)
+    tcPr.append(shd)
+
+def set_cell_text_bold(cell):
+    """设置单元格内所有段落的文本加粗"""
+    for paragraph in cell.paragraphs:
+        for run in paragraph.runs:
+            run.font.bold = True
+
+
+def insert_table_at_placeholder(doc: Document, placeholder: str, table: Table, stop: bool = True):
+    """
+    将表格 table 插入到文档中第一个包含占位符文本的段落位置，并删除该段落。
+    占位符通常单独占一行，例如 "{{1}}"
+    """
+    # 获取表格的 XML 元素
+    tbl_element = table._element
+    
+    # 遍历所有段落，查找包含占位符的段落
+    for paragraph in doc.paragraphs:
+        if placeholder in paragraph.text:
+            # 在段落之后插入表格元素
+            paragraph._element.addnext(tbl_element)
+            # 删除原段落
+            paragraph._element.getparent().remove(paragraph._element)
+            if stop:
+                break
+    else:
+        # 如果没有找到占位符，可抛出异常或打印提示
+        raise ValueError(f"文档中未找到占位符 '{placeholder}'")
