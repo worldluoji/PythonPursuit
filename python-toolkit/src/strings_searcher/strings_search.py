@@ -10,6 +10,7 @@
 import os
 import json
 import csv
+import re
 import argparse
 from typing import List, Dict, Tuple
 
@@ -32,27 +33,40 @@ def load_config(config_path: str) -> Dict:
         raise RuntimeError(f"读取配置文件失败: {e}")
 
 
+def validate_regex(strings: List[str]) -> List[str]:
+    """验证正则表达式列表，返回无效的正则表达式"""
+    invalid = []
+    for s in strings:
+        try:
+            re.compile(s)
+        except re.error:
+            invalid.append(s)
+    return invalid
+
+
 def should_ignore_dir(dir_name: str, ignore_set: set) -> bool:
     """判断目录名是否应被忽略"""
     return dir_name in ignore_set
 
 
-def search_in_file(file_path: str, strings: List[str]) -> List[Tuple[str, int]]:
+def search_in_file(file_path: str, strings: List[str], use_regex: bool = False) -> List[Tuple[str, int]]:
     """
     在文件中搜索所有目标字符串
     返回列表，元素为 (匹配到的字符串, 行号)
     """
     matches = []
     try:
-        # 以只读方式打开，忽略解码错误
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             for line_num, line in enumerate(f, start=1):
                 for s in strings:
-                    if s in line:
-                        matches.append((s, line_num))
+                    if use_regex:
+                        if re.search(s, line):
+                            matches.append((s, line_num))
+                    else:
+                        if s in line:
+                            matches.append((s, line_num))
         return matches
     except (PermissionError, OSError) as e:
-        # 权限不足或无法访问时跳过
         print(f"警告：无法读取文件 {file_path} - {e}")
         return []
 
@@ -63,6 +77,8 @@ def main():
                         help="配置文件路径 (默认: config.json)")
     parser.add_argument('--output', '-o', default='search_results.csv',
                         help="输出CSV文件路径 (默认: search_results.csv)")
+    parser.add_argument('--regex', '-r', action='store_true',
+                        help="启用正则表达式匹配模式")
     args = parser.parse_args()
 
     # 加载配置
@@ -74,6 +90,16 @@ def main():
 
     strings = config['strings']
     directories = config['directories']
+
+    # 如果启用正则表达式模式，提前验证正则表达式的有效性
+    if args.regex:
+        invalid_patterns = validate_regex(strings)
+        if invalid_patterns:
+            print(f"错误：以下正则表达式无效:")
+            for p in invalid_patterns:
+                print(f"  - {p}")
+            return 1
+
     # 合并忽略目录：默认忽略 + 配置中指定的额外忽略
     ignore_dirs = DEFAULT_IGNORE_DIRS.union(set(config.get('ignore_dirs', [])))
 
@@ -92,8 +118,7 @@ def main():
 
             for filename in filenames:
                 file_path = os.path.join(dirpath, filename)
-                # 可选：根据扩展名过滤（默认不过滤，全部尝试）
-                matches = search_in_file(file_path, strings)
+                matches = search_in_file(file_path, strings, args.regex)
                 for s, line_num in matches:
                     results.append((s, file_path, line_num))
 
