@@ -34,13 +34,13 @@ uv pip install -e .
 **普通字符串匹配（默认）：**
 
 ```bash
-python strings_search.py -c config.json
+uv run strings_search.py -c config.json
 ```
 
 **正则表达式匹配：**
 
 ```bash
-python strings_search.py -c config.json -r
+uv run strings_search.py -c config.json -r
 ```
 
 ### 3. 查看结果
