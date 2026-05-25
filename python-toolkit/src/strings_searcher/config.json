@@ -1,5 +1,5 @@
 {
-    "strings": ["abc\\d+de"],
+    "strings": ["abc: .*\\|.*"],
     "directories": [
         "./test"
     ],
