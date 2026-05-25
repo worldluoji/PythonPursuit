@@ -60,8 +60,9 @@ def search_in_file(file_path: str, strings: List[str], use_regex: bool = False) 
             for line_num, line in enumerate(f, start=1):
                 for s in strings:
                     if use_regex:
-                        if re.search(s, line):
-                            matches.append((s, line_num))
+                        match = re.search(s, line)
+                        if match:
+                            matches.append((match.group(), line_num))
                     else:
                         if s in line:
                             matches.append((s, line_num))

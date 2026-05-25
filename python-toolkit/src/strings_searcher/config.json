@@ -1,8 +1,7 @@
 {
-    "strings": ["TRADE_CODE_123", "PAYMENT_VOUCHER", "退款"],
+    "strings": ["abc\\d+de"],
     "directories": [
-        "/path/to/your/project/src",
-        "/path/to/another/project"
+        "./test"
     ],
     "ignore_dirs": [".git", "__pycache__", "node_modules", "dist", "build"]
 }
